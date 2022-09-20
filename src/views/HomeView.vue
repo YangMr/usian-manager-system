@@ -32,26 +32,53 @@ export default {
     HelloWorld,
   },
   created(){
+    this.getMemberList()
+    this.getSupplierList()
+    this.findMember()
+    this.getBanner()
+    this.getList()
+  },
+  methods : {
+    // 3000
+    getBanner(){
+      TestApi.getBanner().then(response=>{
+        console.log("banner=>", response)
+      }).catch(error=>{
+        console.log(error)
+      })
+    },
+    // 4000
+    getList(){
+      TestApi.getList().then(response=>{
+        console.log("list=>", response)
+      }).catch(error=>{
+        console.log(error)
+      })
+    },
     // 会员管理
-    TestApi.getMemberList(this.page,this.size,this.test).then(response=>{
-      console.log('member=>',response)
-    }).catch(error=>{
-      console.log(error)
-    })
-
+    getMemberList(){
+      TestApi.getMemberList(this.page,this.size,this.test).then(response=>{
+        console.log('member=>',response)
+      }).catch(error=>{
+        console.log(error)
+      })
+    },
     // 供应商管理
-    TestApi.getSupplierList(this.page,this.size).then(response=>{
-      console.log("supplier=>", response)
-    }).catch(error=>{
-      console.log(error)
-    })
-
+    getSupplierList(){
+      TestApi.getSupplierList(this.page,this.size).then(response=>{
+        console.log("supplier=>", response)
+      }).catch(error=>{
+        console.log(error)
+      })
+    },
     // 查询会员
-    TestApi.findMember(this.id).then(response=>{
-      console.log("find=>", response)
-    }).catch(error=>{
-      console.log(error)
-    })
+    findMember(){
+      TestApi.findMember(this.id).then(response=>{
+        console.log("find=>", response)
+      }).catch(error=>{
+        console.log(error)
+      })
+    }
   }
 };
 </script>
