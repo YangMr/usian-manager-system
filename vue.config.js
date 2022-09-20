@@ -14,14 +14,28 @@ module.exports = defineConfig({
     https: false,
     // 配置跨域
     proxy : {
-      // /dev-api 代理名称 process.env.VUE_APP_BASE_API === "/dev-api"
-     [process.env.VUE_APP_BASE_API] : {
-        target : process.env.VUE_APP_SERVICE_URL,
+      [process.env.VUE_APP_BASE_API]: {
+        target: process.env.VUE_APP_SERVICE_URL,
+        changeOrigin: true,
+        pathRewrite: {
+          ["^" + process.env.VUE_APP_BASE_API] : ""
+        }
+      },
+      [process.env.VUE_APP_BASE_API1]: {
+        target : process.env.VUE_APP_SERVICE_URL1,
         changeOrigin : true,
         pathRewrite : {
-          ["^" + process.env.VUE_APP_BASE_API] : ''
+          ["^" + process.env.VUE_APP_BASE_API1] : ""
         }
       }
+      // /dev-api 代理名称 process.env.VUE_APP_BASE_API === "/dev-api"
+     // [process.env.VUE_APP_BASE_API] : {
+     //    target : process.env.VUE_APP_SERVICE_URL,
+     //    changeOrigin : true,
+     //    pathRewrite : {
+     //      ["^" + process.env.VUE_APP_BASE_API] : ''
+     //    }
+     //  }
       // "/dev1-api" : {
       //   // 跨域的地址
       //   target : "http://localhost:3000",
