@@ -5,6 +5,7 @@
 
 // 会员管理接口    http://vue.mengxuegu.com/pro-api/member/list/search/1/20
 // 供应商管理接口  http://vue.mengxuegu.com/pro-api/supplier/list/search/1/10
+// 查询单个会员接口  http://vue.mengxuegu.com/pro-api/member/10
 
 // 引入request
 import request from "../utils/request"
@@ -18,7 +19,7 @@ import request from "../utils/request"
 const getMemberList = (page = 1 ,size= 10,data={}) => {
   return request({
     url : `/member/list/search/${page}/${size}`,
-    method : 'POST',
+    method : 'post',
     data
   })
 }
@@ -37,7 +38,23 @@ const getSupplierList = (page = 1,size = 10,data={}) => {
   })
 }
 
+/**
+ * 查询单个会员接口
+ * @param id
+ * @returns {*}
+ */
+const findMember = (id) => {
+  return request({
+    url : `/member/${id}`,
+    method : 'GET',
+    data : {
+      age : 10000
+    }
+  })
+}
+
 export default {
   getMemberList,
-  getSupplierList
+  getSupplierList,
+  findMember
 }

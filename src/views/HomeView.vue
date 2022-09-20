@@ -21,7 +21,11 @@ export default {
   data(){
     return {
       page : 1,
-      size : 10
+      size : 10,
+      id : 100,
+      test : {
+        name : "jack"
+      }
     }
   },
   components: {
@@ -29,7 +33,7 @@ export default {
   },
   created(){
     // 会员管理
-    TestApi.getMemberList(this.page,this.size).then(response=>{
+    TestApi.getMemberList(this.page,this.size,this.test).then(response=>{
       console.log('member=>',response)
     }).catch(error=>{
       console.log(error)
@@ -38,6 +42,13 @@ export default {
     // 供应商管理
     TestApi.getSupplierList(this.page,this.size).then(response=>{
       console.log("supplier=>", response)
+    }).catch(error=>{
+      console.log(error)
+    })
+
+    // 查询会员
+    TestApi.findMember(this.id).then(response=>{
+      console.log("find=>", response)
     }).catch(error=>{
       console.log(error)
     })
