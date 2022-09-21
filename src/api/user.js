@@ -22,7 +22,7 @@ export const login = (data = {}) => {
  * 获取用户信息接口
  * @returns {AxiosPromise}
  */
-export const getUserInfo = () => {
+export const userInfo = () => {
   return request({
     url : '/admin/getUserInfo',
     method : "GET"

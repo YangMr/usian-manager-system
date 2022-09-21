@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import {login, getUserInfo} from "../../api/user"
 export default {
   name: "index",
   data(){
@@ -49,6 +48,15 @@ export default {
     },
     // 登录方法
     async handleLogin(){
+      const token = await this.$store.dispatch("login",this.loginForm)
+      if(!token) return
+      const userInfo = await this.$store.dispatch("handleUserInfo")
+      if(!userInfo) return
+      this.$message.success("登录成功")
+      this.$router.push("/")
+    }
+    /*
+    async handleLogin(){
       try{
         // 调用登录接口
         const response = await login(this.loginForm)
@@ -65,8 +73,7 @@ export default {
       }catch (e){
         console.log(e.message)
       }
-
-    }
+    */
   }
 };
 </script>
