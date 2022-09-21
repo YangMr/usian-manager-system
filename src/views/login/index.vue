@@ -2,15 +2,15 @@
   <div class="login-wrapper">
     <div class="login-form">
       <h2 class="login-title">积云会员管理系统</h2>
-      <el-form ref="form" :model="form" label-width="50px">
-        <el-form-item label="账号">
-          <el-input v-model="form.name"></el-input>
+      <el-form :rules="rules" ref="form" :model="loginForm" label-width="60px">
+        <el-form-item label="账号" prop="username">
+          <el-input v-model.trim="loginForm.username"></el-input>
         </el-form-item>
-        <el-form-item label="密码">
-          <el-input v-model="form.name"></el-input>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model.trim="loginForm.password"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">登录</el-button>
+          <el-button type="primary" @click="handleLoginSubmit">登录</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -18,25 +18,46 @@
 </template>
 
 <script>
+import {login} from "../../api/user"
 export default {
   name: "index",
   data(){
     return {
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+      loginForm: {
+        username: '',
+        password: '',
+      },
+      rules : {
+        username : [
+          {required : true, message : "账号不能为空", trigger : 'blur'},
+          {min : 3, max : 12, message: '请输入3～12个字符', trigger: 'blur'}
+        ],
+        password : [
+          {required : true, message : "密码不能为空", trigger : 'blur'},
+        ]
       }
     }
   },
   methods: {
-    onSubmit() {
-      console.log('submit!');
+    // 点击登录按钮进行表单校验
+    handleLoginSubmit() {
+      this.$refs['form'].validate(valid=>{
+        if(!valid) return
+        // 校验通过之后执行登录方法
+        this.handleLogin()
+      })
+    },
+    // 登录方法
+    async handleLogin(){
+      try{
+        const response = await login(this.loginForm)
+        console.log('response=>',response)
+        console.log('token=>', response.token)
+        // 将token存到vuex 以及 本地 
+      }catch (e){
+        console.log(e.message)
+      }
+
     }
   }
 };
