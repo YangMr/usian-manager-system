@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import {login, userInfo} from "../api/user"
-import {setToken, getToken, setUserInfo, getUserInfo} from "../utils/auth"
+import {login, userInfo, logout} from "../api/user"
+import {setToken, getToken, setUserInfo, getUserInfo, removeTokenAndUserInfo} from "../utils/auth"
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -28,6 +28,12 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    /**
+     * 登录
+     * @param commit
+     * @param loginForm
+     * @returns {Promise<(function(*): *)|CancelToken|*>}
+     */
     async login({commit}, loginForm){
       try{
         const response = await login(loginForm)
@@ -37,6 +43,11 @@ export default new Vuex.Store({
         console.log(e.message)
       }
     },
+    /**
+     * 获取用户信息
+     * @param commit
+     * @returns {AxiosPromise<any>}
+     */
     async handleUserInfo({commit}){
       try{
         const userinfo = await userInfo()
@@ -45,14 +56,17 @@ export default new Vuex.Store({
       }catch (e){
         console.log(e.message)
       }
-    }
-    /*
-    DIS_SET_TOKEN({commit},token){
-      commit("SET_TOKEN",token)
     },
-    DIS_SET_USER_INFO({commit},userInfo){
-      commit("SET_USER_INFO", userInfo)
-    }*/
+    /**
+     * 退出登录
+     * @param commit
+     */
+    async handleLogout({commit}){
+      const response = await logout()
+      commit("SET_TOKEN","")
+      commit("SET_USER_INFO","")
+      return response
+    }
   },
   modules: {},
 });
