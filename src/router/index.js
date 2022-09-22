@@ -13,7 +13,34 @@ const routes = [
   {
     path : "/",
     name : "layout",
-    component: () => import("../layout")
+    component: () => import("../layout"),
+    children : [
+      {
+        path : "index",
+        name : "index",
+        component : () => import("../views/index")
+      },
+      {
+        path : "member",
+        name : "member",
+        component : () => import("../views/member")
+      },
+      {
+        path : "supplier",
+        name : "supplier",
+        component : () => import("../views/supplier")
+      },
+      {
+        path : "goods",
+        name : "goods",
+        component : () => import("../views/goods")
+      },
+      {
+        path : "staff",
+        name : "staff",
+        component : () => import("../views/staff")
+      }
+    ]
   }
 ];
 
