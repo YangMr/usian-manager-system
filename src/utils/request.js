@@ -43,6 +43,8 @@ service.interceptors.response.use(function (response) {
 
   if(response.status === 401){
     // TODO token的过期处理
+    // 清空本地的token以及用户信息
+    // 跳转到登录页
     return
   }
 

@@ -14,6 +14,7 @@ export default new Vuex.Store({
       return state.token
     },
     userInfo(state){
+      console.log("---",JSON.stringify(state.userInfo))
       return state.userInfo
     }
   },

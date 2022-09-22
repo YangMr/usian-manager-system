@@ -10,6 +10,9 @@ import store from "./store";
 import "./style/reset.css"
 import "./style/common.css"
 
+// 页面权限
+import "./permission"
+
 // 注册element-ui
 Vue.use(ElementUI);
 
