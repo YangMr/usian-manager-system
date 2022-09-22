@@ -8,6 +8,7 @@ import router from "./router";
 import store from "./store";
 
 import "./style/reset.css"
+import "./style/common.css"
 
 // 注册element-ui
 Vue.use(ElementUI);
