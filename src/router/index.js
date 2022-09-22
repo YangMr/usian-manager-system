@@ -13,6 +13,7 @@ const routes = [
   {
     path : "/",
     name : "layout",
+    redirect : "/index",
     component: () => import("../layout"),
     children : [
       {
