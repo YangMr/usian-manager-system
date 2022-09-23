@@ -33,13 +33,20 @@ const addMember = (data) => {
 }
 
 // 编辑会员接口
-const editMember = () => {
-
+const editMember = (id,data) => {
+  return request({
+    url : `/member/${id}`,
+    method : "PUT",
+    data
+  })
 }
 
 // 查询单个会员接口
-const findMember = () => {
-
+const findMember = (id) => {
+  return request({
+    url : `/member/${id}`,
+    method : 'GET'
+  })
 }
 
 

@@ -42,7 +42,7 @@
       <el-table-column prop="address" label="会员地址" width="180"></el-table-column>
       <el-table-column label="操作" width="150">
         <template v-slot="scope">
-          <el-button size="mini" @click="handleOpenDialog('edit')">编辑</el-button>
+          <el-button size="mini" @click="handleOpenDialog(scope.row.id)">编辑</el-button>
           <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
@@ -67,17 +67,17 @@
         <el-form-item label="会员姓名" prop="name">
           <el-input v-model="dialogFormParams.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="会员生日">
+        <el-form-item label="会员生日" prop="birthday">
           <el-date-picker value-format="yyyy-MM-dd" v-model="dialogFormParams.birthday" type="date" placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="手机号码">
+        <el-form-item label="手机号码" prop="phone">
           <el-input v-model="dialogFormParams.phone" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="开卡金额">
+        <el-form-item label="开卡金额" prop="money">
           <el-input v-model="dialogFormParams.money" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="可用积分">
+        <el-form-item label="可用积分" prop="integral">
           <el-input v-model="dialogFormParams.integral" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="支付类型" prop="payType">
@@ -85,12 +85,12 @@
             <el-option v-for="(item,index) in payType" :key="index" :label="item.name" :value="item.type"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="会员地址">
+        <el-form-item label="会员地址" prop="address">
           <el-input type="textarea" v-model="dialogFormParams.address"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button @click="handleCancel">取 消</el-button>
         <el-button type="primary" @click="handleSubmit">确 定</el-button>
       </div>
     </el-dialog>
@@ -226,9 +226,15 @@ export default {
     /**
      * 打开弹窗
      */
-    handleOpenDialog(value){
-      this.dialogTitle = value === 'edit' ? '会员编辑' : '会员新增'
+    handleOpenDialog(id){
       this.dialogFormVisible = true
+      if(typeof id === 'number'){
+        this.dialogTitle =  '会员编辑'
+        this.handleFindMember(id)
+        return
+      }
+      this.dialogTitle = '会员新增'
+
     },
     /**
      * 弹窗的提交方法
@@ -236,7 +242,7 @@ export default {
     handleSubmit(){
       this.$refs["dialogForm"].validate(valid=>{
         if(!valid) return
-        this.handleAddMember()
+        this.dialogFormParams.id ? this.handleEditMember() : this.handleAddMember()
       })
     },
     /**
@@ -245,6 +251,7 @@ export default {
     async handleAddMember(){
       try{
         const response = await MemberApi.addMember(this.dialogFormParams)
+        this.handleReset('dialogForm')
         this.dialogFormVisible = false
         this.$message.success("新增成功")
         this.getMemberList()
@@ -256,6 +263,35 @@ export default {
     /**
      * 会员编辑方法
      */
+    async handleEditMember(){
+      try{
+        const response = await MemberApi.editMember(this.dialogFormParams.id, this.dialogFormParams)
+        this.handleReset("dialogForm")
+        this.dialogFormVisible = false
+        this.$message.success("编辑成功")
+        this.getMemberList()
+      }catch(e){
+        console.log(e.message)
+      }
+    },
+    /**
+     * 查询单个会员数据
+     */
+    async handleFindMember(id){
+      try{
+        const member = await MemberApi.findMember(id)
+        this.dialogFormParams = member
+      }catch (e) {
+        console.log(e.message)
+      }
+    },
+    /**
+     * 弹窗的取消按钮方法
+     */
+    handleCancel(){
+      this.dialogFormVisible = false
+      this.handleReset("dialogForm")
+    }
   }
 };
 </script>
