@@ -32,6 +32,9 @@ export const setUserInfo = (userInfo) => {
  * @returns {any}
  */
 export const getUserInfo = () => {
+  if(localStorage.getItem(USER_INFO_KEY) === "undefined"){
+    return "{}"
+  }
   return JSON.parse(localStorage.getItem(USER_INFO_KEY) || "{}")
 }
 /**

@@ -15,15 +15,18 @@ import {removeTokenAndUserInfo} from "./utils/auth";
 // to 要进入的页面  from 跳转前的页面  next可以进入的页面
 // 什么触发路由守卫方法， 页面进行跳转到的时候就会触发
 router.beforeEach(async (to,from, next)=>{
+  console.log("123")
   const token = store.getters.token
   if(token){
     // 已登录的逻辑
     if(to.path === "/login"){
       next(from.path)
     }else{
+
       // 获取用户信息
       let userInfo = store.getters.userInfo
       userInfo = typeof userInfo === "object" ? JSON.stringify(userInfo) : userInfo
+
       if(userInfo === "{}" || userInfo === ""){
         // 没有token
         // token过期
