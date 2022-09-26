@@ -1,21 +1,41 @@
 <template>
 	<div class="mt-2">
-		<base-table @size="handleSize" @page='handlePage' pager :total="total" :page="page" :size="size" :tableData="supplierList" :columns="columns"></base-table>
+		<i-table @page="handlePage" @size="handleSize" pager :total="total" :page="page" :size="size" :tableStyle="tableStyle" :data="supplierList" :column="column">
+			<template v-slot:opteration="scope">
+				<el-button type='primary'>编辑</el-button>
+				<el-button type='danger'>删除</el-button>
+			</template>
+		</i-table>
 	</div>
 </template>
 
 <script>
-	import BaseTable from "../../components/baseTable"
 	import SupplierApi from "../../api/supplier"
 	export default {
-		name: "supplier",
+		name: 'supplier',
+		components : {
+			"i-table" : ()=> import("../../components/baseTable.vue")
+		},
 		data() {
 			return {
-				columns : [
+				page : 1,
+				size : 10,
+				queryFormParams : {
+					name : '',
+					linkman : '',
+					mobile : ''
+				},
+				total : 0,
+				supplierList : [],
+				tableStyle : {
+					height : 380
+				},
+				column : [
 					{
 						type : 'index',
 						label : '序号',
-						width : '180'
+						sequence : true,
+						width : '60'
 					},
 					{
 						label : '供应商名称',
@@ -35,58 +55,36 @@
 					},
 					{
 						label : '操作',
-						type : 'action',
-						actions : [
-							{
-								type : 'primary',
-								text : '编辑'
-							},
-							{
-								type : 'danger',
-								text : '删除'
-							}
-						]
+						slot_name : 'opteration',
+						type : 'slot'
 					}
-				],
-				page: 1,
-				size: 10,
-				queryFormParams: {
-					name: "", // 供应商名称
-					linkman: "", // 联系人名称
-					mobile: "" // 手机号
-				},
-				total : 0,
-				supplierList : []
+				]
 			}
 		},
-		created() {
-			this.getSupplierList()
+		created(){
+			this.getSupperList()
 		},
-		components:{
-			BaseTable
-		},
-		methods: {
-			async getSupplierList() {
-				try {
-					const {total, rows} = await SupplierApi.getSupplierList(this.page, this.size, this.queryFormParams)
-					console.log("Response=>", rows)
+		methods : {
+			async getSupperList(){
+				try{
+					const {rows, total} = await SupplierApi.getSupplierList(this.page, this.size, this.queryFormParams)
 					this.total = total
 					this.supplierList = rows
-				} catch (e) {
+				}catch(e){
 					//TODO handle the exception
 					console.log(e.message)
 				}
 			},
-			handleSize(size){
-				this.size = size
-				this.getSupplierList()
-			},
 			handlePage(page){
 				this.page = page
-				this.getSupplierList()
+				this.getSupperList()
+			},
+			handleSize(size){
+				this.size = size
+				this.getSupperList()
 			}
 		}
-	};
+	}
 </script>
 
 <style scoped>

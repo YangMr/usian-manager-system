@@ -1,72 +1,74 @@
 <template>
-	<div>
-		<el-table :data="tableData" height="250" border style="width: 100%">
-			<template v-for="(item,index) in columns">
-				<el-table-column v-if="item.type && item.type !== 'action'" v-bind="item" :type="item.type"  :label="item.label" >
+	<div class="h-100">
+		<el-table :data="data" :height="tableStyle.height" border style="width: 100%">
+			<template v-for="(item,index) in column">
+				<el-table-column v-if="item.sequence" :type='item.type' :label="item.label" v-bind="item">
 				</el-table-column>
-				<el-table-column v-else-if="!item.type" v-bind="item"  :prop="item.prop" :label="item.label" >
+				<el-table-column v-else-if="!item.type" :prop="item.prop" :label="item.label" v-bind="item">
 				</el-table-column>
-				<el-table-column v-bind="item" v-else-if="item.type === 'action'" :label="item.label">
+				<el-table-column v-else-if="item.type === 'function'" :label="item.label" v-bind="item">
 					<template v-slot="scope">
-						<el-button :type="action.type" v-for="(action,index) in item.actions" :key="index">{{action.text}}</el-button>
+						<span v-html="item.callback && item.callback(scope.row)"></span>
+					</template>
+				</el-table-column>
+				<el-table-column v-else-if="item.type === 'slot'" :label="item.label" v-bind="item">
+					<template v-slot="scope">
+						<slot :name='item.slot_name' :row='scope.row'></slot>
 					</template>
 				</el-table-column>
 			</template>
 		</el-table>
-		<el-pagination
-			  v-if="pager"
-		      @size-change="handleSizeChange"
-		      @current-change="handleCurrentChange"
-		      :current-page="page"
-		      :page-sizes="pageSizes"
-		      :page-size="size"
-		      :layout="layout"
-		      :total="total">
-		    </el-pagination>
+		<el-pagination v-if="pager" @size-change="handleSizeChange" @current-change="handleCurrentChange"
+			:current-page="page" :page-sizes="pageSizes" :page-size="size" :layout="layout" :total="total">
+		</el-pagination>
 	</div>
-	
+
 </template>
 
 <script>
 	export default {
-		name : 'baseTable',
-		props : {
-			tableData : {
-				type : Array,
-				default : () => []
+		name: 'baseTable',
+		props: {
+			column: {
+				type: Array,
+				default: () => []
 			},
-			columns : {
-				type : Array,
-				default : () => []
+			data: {
+				type: Array,
+				default: () => []
 			},
-			page : {
-				type : [Number,String],
-				default : 1
+			page: {
+				type: [Number, String],
+				default: 1
 			},
-			size : {
-				type : [Number,String],
-				default : 10
+			size: {
+				type: [Number, String],
+				default: 10
 			},
-			total : {
-				type : [Number,String],
-				default : 0
+			total: {
+				type: [Number, String],
+				default: 0
 			},
-			pageSizes : {
-				type : Array,
-				default : () => [10,20,30,50]
+			pageSizes: {
+				type: Array,
+				default: () => [10, 20, 30, 50]
 			},
-			layout : {
-				type : String,
-				default : 'total, sizes, prev, pager, next, jumper'
+			layout: {
+				type: String,
+				default: 'total, sizes, prev, pager, next, jumper'
 			},
-			pager : Boolean
+			tableStyle: {
+				type: Object,
+				default: () => {}
+			},
+			pager: Boolean
 		},
-		methods : {
-			handleSizeChange(size){
-				this.$emit('size',size)
-			},
+		methods: {
 			handleCurrentChange(page){
-				this.$emit('page',page)
+				this.$emit("page",page)
+			},
+			handleSizeChange(size){
+				this.$emit("size",size)
 			}
 		}
 	}
