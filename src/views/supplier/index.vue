@@ -1,11 +1,21 @@
 <template>
 	<div class="mt-2">
+		<i-queryForm ref="queryForm"  @search="handleQueryForm" :formItem="formItem" v-model.sync="queryFormParams">
+			<template v-slot:query>
+				<el-button type="primary" @click="handleQueryForm">查询</el-button>
+				<el-button type="primary" @click="handleOpenDialog">新增</el-button>
+				<el-button @click="handleReset">重置</el-button>
+			</template>
+		</i-queryForm>
+		
 		<i-table @page="handlePage" @size="handleSize" pager :total="total" :page="page" :size="size" :tableStyle="tableStyle" :data="supplierList" :column="column">
 			<template v-slot:opteration="scope">
 				<el-button type='primary'>编辑</el-button>
 				<el-button type='danger'>删除</el-button>
 			</template>
 		</i-table>
+		
+		<i-dialog :dialogVisible.sync='dialogVisible' v-model.sync="dialogForm"></i-dialog>
 	</div>
 </template>
 
@@ -14,17 +24,45 @@
 	export default {
 		name: 'supplier',
 		components : {
-			"i-table" : ()=> import("../../components/baseTable.vue")
+			"i-table" : ()=> import("../../components/baseTable"),
+			"i-queryForm" : () => import("../../components/queryForm"),
+			"i-dialog" : () => import("../../components/Dialog")
 		},
 		data() {
 			return {
+				dialogVisible : true,
 				page : 1,
 				size : 10,
+				dialogForm : {
+					
+				},
 				queryFormParams : {
 					name : '',
 					linkman : '',
 					mobile : ''
 				},
+				rules : {},
+				formItem :  [
+					{
+						type : 'input',
+						placeholder : '供应商名称',
+						prop : 'linkman'
+					},
+					{
+						type : 'input',
+						placeholder : '联系人',
+						prop : 'name'
+					},
+					{
+						type : 'input',
+						placeholder : '联系电话',
+						prop : 'mobile'
+					},
+					{
+						type : 'slot',
+						slot_name : 'query'
+					}
+				],
 				total : 0,
 				supplierList : [],
 				tableStyle : {
@@ -82,6 +120,16 @@
 			handleSize(size){
 				this.size = size
 				this.getSupperList()
+			},
+			handleQueryForm(){
+				this.page = 1
+				this.getSupperList()
+			},
+			handleReset(){
+				this.$refs["queryForm"].handleResetForm()
+			},
+			handleOpenDialog(){
+				this.dialogVisible = true
 			}
 		}
 	}
