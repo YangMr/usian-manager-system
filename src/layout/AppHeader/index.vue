@@ -6,7 +6,7 @@
     </router-link>
     <el-dropdown @command="handleCommand">
         <span class="el-dropdown-link">
-          {{$store.getters.userInfo.name || ""}}<i class="el-icon-arrow-down el-icon--right"></i>
+          {{$store.getters.userInfo.username || ""}}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-edit" command="changePass">修改密码</el-dropdown-item>

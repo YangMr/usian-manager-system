@@ -23,7 +23,7 @@
 		data(){
 			return {
 				page : 1,
-				size : 1,
+				size : 10,
 				tableStyle : {
 					height : "380"
 				},
@@ -78,8 +78,8 @@
 		methods : {
 			async getStaffList(){
 				try{
-					const {total, rows} = await StaffApi.getStaffList(this.page,this.size, this.queryFormParams)
-					this.total = total
+					const {count, rows} = await StaffApi.getStaffList(this.page,this.size, this.queryFormParams)
+					this.total = count
 					this.staffList = rows
 				}catch(e){
 					console.log(e.message)

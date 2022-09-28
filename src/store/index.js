@@ -38,6 +38,7 @@ export default new Vuex.Store({
     async login({commit}, loginForm){
       try{
         const response = await login(loginForm)
+		console.log("login=>", response)
         commit("SET_TOKEN",response.token)
         return response.token
       }catch (e){
@@ -52,6 +53,7 @@ export default new Vuex.Store({
     async handleUserInfo({commit}){
       try{
         const userinfo = await userInfo()
+		console.log("userinfo=>", userinfo)
         commit("SET_USER_INFO",userinfo)
         return userinfo
       }catch (e){

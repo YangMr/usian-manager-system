@@ -76,12 +76,16 @@ service.interceptors.request.use(function(config) {
 // 响应拦截器
 service.interceptors.response.use(function(response) {
 	
+
 	// 关闭loading
 	loading.close()
 
 	if (response.status < 400) {
-		return response.data.data
-
+		if(response.data.data){
+			return response.data.data
+		}else{
+			return response.data.msg
+		}
 	}
 
 	if (response.status === 401) {

@@ -150,9 +150,9 @@
 				try {
 					const {
 						rows,
-						total
+						count
 					} = await SupplierApi.getSupplierList(this.page, this.size, this.queryFormParams)
-					this.total = total
+					this.total = count
 					this.supplierList = rows
 				} catch (e) {
 					//TODO handle the exception
@@ -228,6 +228,8 @@
 					type: 'warning'
 				}).then(async () => {
 					try {
+						this.page = 1
+						this.handleReset()
 						const response = await SupplierApi.deleteSupplier(id)
 						this.$message.success('删除成功')
 						this.getSupperList()

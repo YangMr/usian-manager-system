@@ -168,8 +168,8 @@ export default {
      * @returns {Promise<void>}
      */
     async getMemberList(){
-      const {rows, total} = await MemberApi.getMemberList(this.page,this.size, this.memberQueryParams)
-      this.total = total
+      const {rows, count} = await MemberApi.getMemberList(this.page,this.size, this.memberQueryParams)
+      this.total = count
       this.memberList = rows
     },
     /**
